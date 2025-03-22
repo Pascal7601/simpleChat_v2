@@ -1,0 +1,61 @@
+.l-bar {
+  border-right: 1px solid gray;
+  padding: 10px;
+  background-color: #001030;
+  overflow-y: scroll;
+}
+.l-bar::-webkit-scrollbar {
+  display: none;
+}
+.l-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+.option {
+  position: absolute;
+  background-color: white;
+  padding: 10px 8px;
+  top: 100%;
+  right: 0;
+  display: none;
+  z-index: 10;
+}
+.app-icon {
+  width: 30px;
+}
+.dots {
+  width: 15px;
+  color: white;
+  height: 18px;
+  cursor: pointer;
+  padding: 8px;
+}
+.dot-container {
+  position: relative;
+}
+.dot-container:hover .option {
+  display: block;
+}
+.search {
+  background-color: #002670;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px 12px;
+  gap: 10px;
+}
+.search-icon {
+  width: 16px;
+  color: white;
+}
+.search input{
+  border: none;
+  outline: none;
+  background: none;
+  padding: 5px;
+  color: white;
+  flex: 1;
+}

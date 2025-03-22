@@ -1,0 +1,22 @@
+.chat-details {
+  padding: 10px 0;
+}
+.chat-user {
+  display: flex;
+  cursor: pointer;
+  padding: 10px 0;
+  gap: 10px;
+}
+.chat-user:hover {
+  background-color: #077EFF;
+}
+.chat-user:hover .c-message {
+  color: white;
+}
+.c-username {
+  color: white;
+}
+.c-message {
+  font-size: 11px;
+  color: #9f9f9f;
+}

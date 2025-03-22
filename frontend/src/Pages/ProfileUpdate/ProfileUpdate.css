@@ -1,0 +1,40 @@
+.profile {
+  padding: 10px 30px;
+  color: white;
+}
+.profile-title {
+  color: black;
+  align-self: center;
+}
+.profile-img {
+  width: 100px;
+  border-radius: 50%;
+  padding-right: 10px;
+}
+.profile-top {
+  display: flex;
+}
+.profile-top div {
+  display: flex;
+  flex-direction: column;
+}
+.bio {
+  padding: 10px 0;
+}
+.about {
+  padding-bottom: 15px;
+}
+.about p, .contact p, .files p, .email p, .city p, .address p{
+  color: black;
+  font-size: larger;
+}
+.images-s img {
+  width: 150px;
+}
+.images-s {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+#bio-rows {
+  padding: 10px 0;
+}
