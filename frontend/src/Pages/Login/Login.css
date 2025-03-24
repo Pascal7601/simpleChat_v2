@@ -31,6 +31,7 @@
   background-color: rgb(4, 167, 4);
   border-radius: 4px;
   cursor: pointer;
+  color: white;
 }
 .login-form p {
   font-size: 14px;

@@ -21,7 +21,8 @@
   color: white;
 }
 .username span {
-  color: gray;
+  color: green;
+  font-size: 14px;
 }
 .msg-input {
   width: 100%;
