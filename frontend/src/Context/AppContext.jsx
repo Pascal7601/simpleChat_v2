@@ -8,7 +8,7 @@ function AppProvider({children}) {
 
   const fetchCurrentUser = async (token) => {
     try {
-      const response = await fetch('http://localhost:8001/me', {
+      const response = await fetch('http://localhost:8002/me', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

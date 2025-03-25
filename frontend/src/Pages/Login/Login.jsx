@@ -17,8 +17,8 @@ function Login() {
     e.preventDefault();
 
     const url = currState === 'Login' 
-      ? 'http://localhost:8001/login' 
-      : 'http://localhost:8001/register';
+      ? 'http://localhost:8002/login' 
+      : 'http://localhost:8002/register';
 
     const requestBody = currState === 'Login' 
       ? { email, password } 

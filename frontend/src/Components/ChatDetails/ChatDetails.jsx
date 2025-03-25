@@ -3,16 +3,14 @@ import { IoMdSend } from "react-icons/io";
 import { useState, useEffect, useContext } from 'react'
 import { AppContext } from '../../Context/AppContext';
 
-function ChatDetails({ selectedUser, setSelectedUser }) {
+function ChatDetails({ selectedUser, setSelectedUser, setNewChat }) {
   const [users, setUsers] = useState([]);
-  const [message, setMessage] = useState('');
-  const [newChat, setNewChat] = useState([]);
   const {currentUser, token} = useContext(AppContext);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:8001/users', {
+        const response = await fetch('http://localhost:8002/users', {
           headers: {
             'Content-Type': 'application/json',
           }
@@ -32,11 +30,11 @@ function ChatDetails({ selectedUser, setSelectedUser }) {
     const fetchChat = async () => {
       if(!selectedUser) return;
       try {
-        const response = await fetch('http://localhost:8001/chats/new', {
+        const response = await fetch('http://localhost:8002/chats/new', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`  
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({ receiver_id: selectedUser.id })
         })
@@ -54,12 +52,14 @@ function ChatDetails({ selectedUser, setSelectedUser }) {
   return (
     <>
     <div className="chat-details">
-      {users.map(user => (
+      {users
+      .filter(user => user.id !== currentUser.id)
+      .map(user => (
       <div onClick={()=> setSelectedUser(user)} className="chat-user" key={user.id}>
         <img className='avatar' src="src/assets/avatar.png" alt="" />
           <div className="friends">
           <p className="c-username">{user.username}</p>
-          <span className='c-message'>Vipi</span>
+          {/* <span className='c-message'>Vipi</span> */}
         </div>
       </div>
       ))}

@@ -57,8 +57,9 @@
   height: 83%;
   overflow-y: scroll;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   padding-bottom: 50px;
+  justify-content: end;
 }
 .chat-space::-webkit-scrollbar {
   display: none;
@@ -86,7 +87,7 @@
   max-width: 200px;
   font-size: 11px;
   font-weight: 300;
-  border-bottom: 30px;
+  margin-bottom: 10px;
   border-radius: 8px 8px 0 8px;
 }
 .new-msg .msg {
@@ -96,4 +97,13 @@
   max-width: 300px;
   margin-bottom: 30px;
   border-radius: 10px;
+}
+.main-chat .chat-icon {
+  width: 150px;
+  align-self: center;
+}
+.select-user {
+  font-size: larger;
+  color: white;
+  align-self: center;
 }
