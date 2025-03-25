@@ -3,7 +3,7 @@ import './LeftSideBar.css'
 import { IoIosSearch } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 
-function LeftSideBar() {
+function LeftSideBar({ setSelectedUser, selectedUser }) {
 
   return (
     <div className="l-bar">
@@ -22,7 +22,7 @@ function LeftSideBar() {
         <IoIosSearch className='search-icon'/>
         <input type="text" placeholder='Search' />
       </div>
-      <ChatDetails />
+      <ChatDetails setSelectedUser={setSelectedUser} selectedUser={selectedUser}/>
     </div>
   )
 }

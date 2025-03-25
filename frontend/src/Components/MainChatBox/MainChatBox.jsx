@@ -2,13 +2,13 @@ import './MainChatBox.css'
 import { FaPlus } from "react-icons/fa6";
 import { IoMdSend } from "react-icons/io";
 
-function MainChatBox() {
+function MainChatBox({ selectedUser }) {
   return (
     <div className="main-chat">
       <div className="user">
         <img className='avatar' src="src/assets/avatar.png" alt="" />
         <div className='username'>
-          <p>Sonia</p>
+          <p>{selectedUser ? selectedUser.username : 'Select a user to chat'}</p>
           <span>Online</span>
         </div>
       </div>

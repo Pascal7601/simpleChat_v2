@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './Login.css'
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AppContext } from '../../Context/AppContext';
 
 function Login() {
   const [currState, setCurrState] = useState('Sign up');
@@ -8,56 +11,50 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const {login} = useContext(AppContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(currState === 'Login') {
-      try {
-        const response = await fetch('http://localhost:8001/login', {
+    const url = currState === 'Login' 
+      ? 'http://localhost:8001/login' 
+      : 'http://localhost:8001/register';
+
+    const requestBody = currState === 'Login' 
+      ? { email, password } 
+      : { username, email, password };
+
+    try {
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          email,
-          password
-        })
-      })
-      const data = await response.json();
-      console.log("Response", data);
-      if(response.ok) {
-        navigate('/chat');
-      }
-      }
-      catch (error) {
-        console.log(error);
-      }
-    } else {
+        body: JSON.stringify(requestBody)
+      });
 
-    try {
-      const response = await fetch('http://localhost:8001/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username,
-        email,
-        password
-      })
-    })
-    const data = await response.json();
-    console.log("Response", data)
-    if(response.ok) {
-      setCurrState('Login');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Something went wrong");
+      }
+
+      const data = await response.json();
+      console.log("Response:", data);
+
+      if (currState === 'Login') {
+        toast.success('Login successful');
+        login(data.token);
+        navigate('/chat');
+      } else {
+        toast.success('Registration successful, please log in');
+        setCurrState('Login');
+      }
+
+    } catch (error) {
+      toast.error(error.message);
+      console.error("Error:", error);
     }
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
-}
+  };
       
   return (
 

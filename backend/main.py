@@ -11,6 +11,7 @@ app = FastAPI()
 
 app.include_router(user.user_router)
 app.include_router(message.msg_router)
+app.include_router(conversation.convo_router)
 
 
 
