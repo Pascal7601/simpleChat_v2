@@ -13,10 +13,6 @@ from bson import ObjectId
 
 msg_router = APIRouter()
 
-@msg_router.get('/messages')
-def all_messages():
-  msgs = Message.objects().all()
-  return jsonable_encoder(msgs)
 # Store active WebSocket connections per conversation
 active_connections = {}
 
@@ -47,8 +43,8 @@ async def websocket_endpoint(websocket: WebSocket, convo_id: str, sender_id: str
             for connection in active_connections[convo_id]:
                 await connection.send_text(json.dumps({
                     "sender_id": sender_id,
-                    "message": msg_data["content"],
-                    "convo_id": convo_id,
+                    "content": msg_data["content"],
+                    "conversation_id": convo_id,
                     "created_at": message.timestamp
                 }))
 
@@ -56,9 +52,19 @@ async def websocket_endpoint(websocket: WebSocket, convo_id: str, sender_id: str
         active_connections[convo_id].remove(websocket)
         await websocket.close()
 
-def all_messages():
-  msgs = Message.objects().all()
-  return msgs
+@msg_router.get('/messages/{convo_id}')
+async def get_messages(convo_id: str, credentials: HTTPBasicCredentials = Depends(security)):
+    if not AuthHandler().decode_token(credentials.credentials):
+        raise HTTPError("Unauthorized")
+    messages = Message.objects(conversation_id=convo_id).all()
+ 
+    return [{
+        "id": str(msg.id),
+        "sender_id": str(msg.sender_id.id),
+        "conversation_id": str(msg.conversation_id.id),
+        "content": msg.content,
+        "timestamp": msg.timestamp
+    } for msg in messages]
 
 def get_msg(msg_id):
   msgs = Message.objects().filter(id=msg_id).all()

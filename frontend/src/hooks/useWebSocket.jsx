@@ -7,6 +7,8 @@ const useWebSocket = (conversationId, senderId) => {
   useEffect(() => {
     if (!conversationId || !senderId) return;
 
+    setMessages([]);
+
     ws.current = new WebSocket(`ws://localhost:8002/ws/message/${conversationId}/${senderId}`);
 
     ws.current.onmessage = (event) => {

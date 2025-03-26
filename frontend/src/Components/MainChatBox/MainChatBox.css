@@ -1,6 +1,4 @@
 .main-chat {
-  display: flex;
-  flex-direction: column;
   position: relative;
   height: 100vh;
   overflow: hidden;
@@ -25,7 +23,7 @@
   font-size: 14px;
 }
 .msg-input {
-  width: 100%;
+  display: flex;
   background-color: #16423C;
   padding: 10px 15px;
   position: absolute;
@@ -37,7 +35,7 @@
   align-items: center;
 }
 .input-msg {
-  width: 90%;
+  flex: 1;
   border: none;
   outline: none;
   background: transparent;
@@ -54,12 +52,12 @@
   color: green;
 }
 .chat-space {
-  height: 83%;
-  overflow-y: scroll;
+  overflow-y: auto; 
+  scroll-behavior: smooth;
   display: flex;
   flex-direction: column;
   padding-bottom: 50px;
-  justify-content: end;
+  height: calc(100% - 150px);
 }
 .chat-space::-webkit-scrollbar {
   display: none;
@@ -106,4 +104,9 @@
   font-size: larger;
   color: white;
   align-self: center;
+}
+.msg-time {
+  font-size: 13px;
+  color: #615f5f;
+  margin-left: 2px;
 }

@@ -9,6 +9,28 @@ function MainChatBox({ selectedUser, newChat }) {
   const {currentUser, token} = useContext(AppContext);
   const [message, setMessage] = useState('');
   const {messages, sendMessage} = useWebSocket(newChat?.id, currentUser?.id);
+  const [oldMessages, setOldMessages] = useState([]);
+
+  useEffect(() => {
+    if(!newChat) return;
+    const fetchMessages = async () => {
+      try {
+        const response = await fetch(`http://localhost:8002/messages/${newChat.id}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        const data = await response.json()
+        setOldMessages(data)
+      }
+      catch (error) {
+        console.error('Error:', error)
+      }
+    }
+    fetchMessages();
+  }
+  , [newChat])
 
   const handleSubmit = async () => {
     if(message.trim() === '') return;
@@ -33,14 +55,24 @@ function MainChatBox({ selectedUser, newChat }) {
       </div>
 
       <div className="chat-space">
-        {messages.map((msg, index) => (
+        {[...oldMessages, ...messages]
+        .filter(msg => msg.conversation_id === newChat?.id)
+        .map((msg, index) => {
+          const isOldMessage = oldMessages.some(oldMsg => oldMsg.id === msg.id);
+      
+          // Use timestamp from DB for old messages, otherwise use current time
+          const messageTime = isOldMessage
+            ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+          return (
           <div key={msg.id || `temp-${index}`} className={msg.sender_id === currentUser.id ? 'msg-own' : 'new-msg'}>
-            <p className='msg'>{msg.message}</p>
-            <div>
-            <span>{new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            <p className='msg'>{msg.content}</p>
+            <div className='msg-time'>
+            <span>{messageTime}</span>
             </div>
           </div>
-        ))}
+        )})}
       </div>
 
       <div className="msg-input">
