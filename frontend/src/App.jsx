@@ -1,26 +1,38 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './App.css'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import Login from './Pages/Login/Login'
 import ChatBox from './Pages/ChatBox/ChatBox'
 import ProfileUpdate from './Pages/ProfileUpdate/ProfileUpdate'
 import { ToastContainer } from 'react-toastify';
-import AppProvider from './Context/AppContext'
+import { AppContext } from './Context/AppContext'
+
 
 
 function App() {
+  const ProtectedRoute = ({ children }) => {
+    const { token } = useContext(AppContext);
+    if(!token) {
+      return <Navigate to="/" />
+    }
+    return children;
+  };
 
 
   return (
     <>
     <ToastContainer />
-    <AppProvider>
       <Routes>
         <Route path='/' element={<Login />}/>
-        <Route path='/chat' element={<ChatBox />}/>
-        <Route path='/profile' element={<ProfileUpdate />}/>
+        <Route path='/chat' element={
+          <ProtectedRoute>
+            <ChatBox />
+          </ProtectedRoute>}/>
+        <Route path='/profile' element={
+            <ProtectedRoute>
+              <ProfileUpdate />
+            </ProtectedRoute>}/>
       </Routes>
-    </AppProvider>
       
     </>
   )

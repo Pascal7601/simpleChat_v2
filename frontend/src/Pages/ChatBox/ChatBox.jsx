@@ -5,12 +5,15 @@ import { useState } from 'react'
 
 function ChatBox() {
   const [selectedUser, setSelectedUser] = useState(null);
-  const [newChat, setNewChat] = useState([]);
+  const [newChat, setNewChat] = useState(null);
+  const [chatHistory, setChatHistory] = useState({});
 
   return (
     <div className="chat-box">
-      <LeftSideBar setSelectedUser={setSelectedUser} selectedUser={selectedUser} setNewChat={setNewChat}/>
-      <MainChatBox selectedUser={selectedUser} newChat={newChat}/>
+      <LeftSideBar setSelectedUser={setSelectedUser} 
+      selectedUser={selectedUser} setNewChat={setNewChat}
+      newChat={newChat} chatHistory={chatHistory} setChatHistory={setChatHistory}/>
+      <MainChatBox selectedUser={selectedUser} newChat={newChat} setSelectedUser={setSelectedUser}/>
     </div>
   )
 }

@@ -19,3 +19,11 @@ class UserResponse(BaseModel):
     last_seen: Optional[str]
     first_name: Optional[str]
     last_name: Optional[str]
+
+class UserUpdate(BaseModel):
+    username: Optional[str]
+    bio: Optional[str]
+    first_name: Optional[str]
+    last_name: Optional[str]
+    phone_number: Optional[str]
+    address: Optional[str]

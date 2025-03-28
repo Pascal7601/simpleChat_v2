@@ -3,3 +3,8 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
 }
+@media (max-width: 768px){
+  .chat-box {
+    grid-template-columns: 1fr;
+  }
+}

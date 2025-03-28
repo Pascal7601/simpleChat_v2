@@ -1,4 +1,5 @@
 from database.messages import Message
+from database.conversations import Conversation
 import datetime
 from fastapi import WebSocket, WebSocketDisconnect, Depends
 from typing import List
@@ -6,7 +7,6 @@ from fastapi import APIRouter
 from fastapi.security import  HTTPBasicCredentials
 from auth.auth import security, AuthHandler
 from utils.response import HTTPError
-from fastapi.encoders import jsonable_encoder
 import json
 from bson import ObjectId
 
@@ -20,6 +20,9 @@ active_connections = {}
 async def websocket_endpoint(websocket: WebSocket, convo_id: str, sender_id: str):
     await websocket.accept()
 
+    conversation = Conversation.objects(id=ObjectId(convo_id)).first()
+    if not conversation:
+        raise HTTPError("Conversation not found")
     # Store connection
     if convo_id not in active_connections:
         active_connections[convo_id] = []
@@ -38,6 +41,10 @@ async def websocket_endpoint(websocket: WebSocket, convo_id: str, sender_id: str
                 timestamp=str(datetime.datetime.now())
             )
             message.save()
+
+            conversation.last_message = message
+            conversation.updated_at = message.timestamp
+            conversation.save()
 
             # Broadcast message to all participants
             for connection in active_connections[convo_id]:

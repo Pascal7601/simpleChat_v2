@@ -1,20 +1,25 @@
-import { useContext, useEffect, useState } from 'react';
+import { use, useContext, useEffect, useRef, useState } from 'react';
 import './MainChatBox.css'
 import { FaPlus } from "react-icons/fa6";
 import { IoMdSend } from "react-icons/io";
 import { AppContext } from '../../Context/AppContext';
 import useWebSocket from '../../hooks/useWebSocket';
+import { Navigate, useNavigate } from 'react-router-dom';
+import LeftSideBar from '../LeftSideBar/LeftSideBar';
 
-function MainChatBox({ selectedUser, newChat }) {
+function MainChatBox({ selectedUser, newChat, setSelectedUser }) {
   const {currentUser, token} = useContext(AppContext);
   const [message, setMessage] = useState('');
-  const {messages, sendMessage} = useWebSocket(newChat?.id, currentUser?.id);
+  const {messages, sendMessage, setMessages} = useWebSocket(newChat?.id, currentUser?.id);
   const [oldMessages, setOldMessages] = useState([]);
-
+  const chatSpaceRef = useRef(null);
+  const navigate = useNavigate()
+ 
   useEffect(() => {
     if(!newChat) return;
     const fetchMessages = async () => {
       try {
+        setOldMessages([]);
         const response = await fetch(`http://localhost:8002/messages/${newChat.id}`, {
           headers: {
             'Content-Type': 'application/json',
@@ -41,20 +46,32 @@ function MainChatBox({ selectedUser, newChat }) {
     });
     setMessage('');
   }
+  useEffect(() => {
+    if(!chatSpaceRef.current) return;
+    chatSpaceRef.current.scrollTop = chatSpaceRef.current.scrollHeight;
+  }
+  , [messages, oldMessages])
+
+  const handleBack = () => {
+    setSelectedUser(null);
+    setMessages([]);
+  }
 
 
   return (
     selectedUser ? (
-    <div className="main-chat">
+    <div className={`main-chat ${selectedUser ? 'hide-main-on-mobile' : ''}`}>
       <div className="user">
         <img className='avatar' src="src/assets/avatar.png" alt="" />
         <div className='username'>
           <p>{ selectedUser.username}</p>
           <span>Online</span>
         </div>
+        <button className='back-btn' onClick={handleBack}>Back</button>
       </div>
 
-      <div className="chat-space">
+      <div className="chat-space" ref={chatSpaceRef}>
+        {/* <div className="chat-messages"> */}
         {[...oldMessages, ...messages]
         .filter(msg => msg.conversation_id === newChat?.id)
         .map((msg, index) => {
@@ -73,6 +90,7 @@ function MainChatBox({ selectedUser, newChat }) {
             </div>
           </div>
         )})}
+        {/* </div> */}
       </div>
 
       <div className="msg-input">
@@ -90,9 +108,11 @@ function MainChatBox({ selectedUser, newChat }) {
     </div>
       ) 
       : (
-        <div className="main-chat">
-          <img className='chat-icon' src="src/assets/app-icon.png" alt="" />
-          <p className='select-user'>Your All Time Chat Application</p>
+        <div className={`main-chat ${selectedUser ? 'hide-main-on-mobile' : ''}`}>
+          <div className="other-option">
+            <img className='chat-icon' src="src/assets/app-icon.png" alt="" />
+            <p className='select-user'>Chat Privately with SimChat</p>
+          </div>
         </div>
       )
   )

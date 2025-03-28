@@ -3,6 +3,7 @@
   padding: 10px;
   background-color: #001030;
   overflow-y: scroll;
+  z-index: 10;
 }
 .l-bar::-webkit-scrollbar {
   display: none;
@@ -19,7 +20,6 @@
   padding: 10px 8px;
   top: 100%;
   right: 0;
-  display: none;
   z-index: 10;
 }
 .app-icon {
@@ -58,4 +58,20 @@
   padding: 5px;
   color: white;
   flex: 1;
+}
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+.profile-link {
+  cursor: pointer;
+  color: black;
+}
+.logout-btn {
+  cursor: pointer;
+  color: black;
+}
+a {
+  text-decoration: none;
 }

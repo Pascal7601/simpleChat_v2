@@ -11,9 +11,11 @@
   display: flex;
   padding: 10px 15px;
   border-bottom: 1px solid gray;
+  position: relative;
 }
 .username {
   margin-left: 10px;
+  margin-right: 100px;
 }
 .username p {
   color: white;
@@ -62,6 +64,11 @@
 .chat-space::-webkit-scrollbar {
   display: none;
 }
+/* .chat-messages {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+} */
 .msg-own, .new-msg {
   display: flex;
   align-items: end;
@@ -109,4 +116,34 @@
   font-size: 13px;
   color: #615f5f;
   margin-left: 2px;
+}
+.other-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 100px;
+  gap: 5px;
+}
+@media (max-width: 768px){
+  .main-chat {
+    display: none;
+  }
+
+  .main-chat.hide-main-on-mobile {
+    display: block;
+    width: 100%;
+  }
+}
+.back-btn {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  display: flex;
+  font-size: smaller;
+  border: none;
+  align-self: center;
+  padding: 2px 5px;
+  background-color: #16423C;
+  color: white;
 }

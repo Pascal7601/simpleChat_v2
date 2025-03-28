@@ -14,17 +14,21 @@ def all_conversations(credentials: HTTPBasicCredentials = Depends(security)):
   payload = AuthHandler().decode_token(credentials.credentials)
   user_id = payload.get('user_id')
   convos = Conversation.objects().filter(participants=user_id).all()
-  convos_list = [
-    {
-      'id': str(convo.id),
-      'participants': [{
-        'id': str(participant.id),
-        'username': participant.username,
-      } for participant in convo.participants],
-      'updated_at': str(convo.updated_at)
-    }
-    for convo in convos
-  ]
+  convos_list = []
+  for convo in convos:
+      last_msg = convo.last_message.fetch() if convo.last_message else None
+      
+      convos_list.append({
+          'id': str(convo.id),
+          'participants': [{'id': str(p.id), 'username': p.username} for p in convo.participants],
+          'last_message': {
+              'id': str(last_msg.id),
+              'content': last_msg.content,
+              'timestamp': str(last_msg.timestamp)
+          } if last_msg else None,
+          'updated_at': str(convo.updated_at)
+      })
+  
   return convos_list
 
 @convo_router.post('/chats/new')
@@ -53,7 +57,8 @@ def new_chat(
         'id': str(participant.id),
         'username': participant.username,
       } for participant in existing_convo.participants],
-      'updated_at': str(existing_convo.updated_at)
+      'updated_at': str(existing_convo.updated_at),
+      'last_message': existing_convo.last_message.fetch().content if existing_convo.last_message else None
     }
   
   convo = Conversation(participants=participants)
@@ -63,6 +68,7 @@ def new_chat(
     'participants': [{
       'id': str(participant.id),
       'username': participant.username,
+      'last_message': None,
     } for participant in convo.participants],
     'updated_at': str(convo.updated_at)
   }

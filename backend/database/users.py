@@ -9,3 +9,6 @@ class User(mongoengine.Document):
   avatar = mongoengine.StringField()
   status = mongoengine.StringField(default='offline')
   last_seen = mongoengine.DateTimeField()
+  phone_number = mongoengine.StringField()
+  address = mongoengine.StringField()
+  bio = mongoengine.StringField()

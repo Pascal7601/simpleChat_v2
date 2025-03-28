@@ -2,10 +2,12 @@ import './ChatDetails.css'
 import { IoMdSend } from "react-icons/io";
 import { useState, useEffect, useContext } from 'react'
 import { AppContext } from '../../Context/AppContext';
+import useWebSocket from '../../hooks/useWebSocket';
 
-function ChatDetails({ selectedUser, setSelectedUser, setNewChat }) {
+function ChatDetails({ selectedUser, setSelectedUser, setNewChat, newChat, setChatHistory, chatHistory }) {
   const [users, setUsers] = useState([]);
   const {currentUser, token} = useContext(AppContext);
+  const {messages, sendMessage} = useWebSocket(newChat?.id, currentUser?.id, setChatHistory, chatHistory, selectedUser);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -39,7 +41,6 @@ function ChatDetails({ selectedUser, setSelectedUser, setNewChat }) {
           body: JSON.stringify({ receiver_id: selectedUser.id })
         })
         const data = await response.json()
-        console.log(data);
         setNewChat(data);
       }
       catch (error) {
@@ -48,6 +49,35 @@ function ChatDetails({ selectedUser, setSelectedUser, setNewChat }) {
     }
     fetchChat();
   }, [selectedUser])
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const response = await fetch('http://localhost:8002/chats', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+
+        // Map chat history by user ID
+        const chatData = {};
+        data.forEach(chat => {
+          const otherUser = chat.participants.find(user => user.id !== currentUser.id);
+          if (otherUser) {
+            chatData[otherUser.id] = chat?.last_message?.content || "";
+          }
+        });
+        console.log(chatData);
+        setChatHistory(chatData);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    fetchChats();
+  }, [token, currentUser]);
+
 
   return (
     <>
@@ -59,7 +89,9 @@ function ChatDetails({ selectedUser, setSelectedUser, setNewChat }) {
         <img className='avatar' src="src/assets/avatar.png" alt="" />
           <div className="friends">
           <p className="c-username">{user.username}</p>
-          {/* <span className='c-message'>Vipi</span> */}
+          <span className='c-message'>
+            {chatHistory[user.id] || ''}
+          </span>
         </div>
       </div>
       ))}

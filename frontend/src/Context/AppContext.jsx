@@ -19,12 +19,12 @@ function AppProvider({children}) {
       }
       const data = await response.json();
       setCurrentUser(data);
-      console.log(data);
     }
     catch(error) {
       console.error('Error:', error);
     }
   }
+  console.log(currentUser);
   useEffect(() => {
     if (token) {
       fetchCurrentUser(token);
