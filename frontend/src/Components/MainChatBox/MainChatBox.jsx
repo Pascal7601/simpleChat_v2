@@ -62,7 +62,7 @@ function MainChatBox({ selectedUser, newChat, setSelectedUser }) {
     selectedUser ? (
     <div className={`main-chat ${selectedUser ? 'hide-main-on-mobile' : ''}`}>
       <div className="user">
-        <img className='avatar' src="src/assets/avatar.png" alt="" />
+        <img className='avatar' src={selectedUser?.avatar || "src/assets/avatar.png"} alt="" />
         <div className='username'>
           <p>{ selectedUser.username}</p>
           <span>Online</span>
