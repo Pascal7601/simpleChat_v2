@@ -1,4 +1,4 @@
-import LeftSideBar from '../../Components/LeftSideBar/LeftSideBar'
+import LeftSideBar from '../../Components/LeftSideBar/LeftSideBar';
 import MainChatBox from '../../Components/MainChatBox/MainChatBox'
 import './ChatBox.css'
 import { useState } from 'react'

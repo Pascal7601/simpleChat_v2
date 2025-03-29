@@ -26,7 +26,7 @@ function ProfileUpdate() {
         address: currentUser.address || '',
         username: currentUser.username || ''
       });
-      setImagePreview(currentUser.avatar || "src/assets/avatar.png");
+      setImagePreview(currentUser.avatar || "/avatar.png");
     }
   }, []);
 
