@@ -20,3 +20,11 @@
   font-size: 11px;
   color: #9f9f9f;
 }
+.avatar {
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+  overflow: hidden;
+  aspect-ratio: 1/1;
+}

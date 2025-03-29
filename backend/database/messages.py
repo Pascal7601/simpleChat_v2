@@ -7,3 +7,5 @@ class Message(mongoengine.Document):
   content = mongoengine.StringField()
   timestamp = mongoengine.DateTimeField()
   status = mongoengine.StringField(choices=['sent', 'delivered', 'read'], default='sent')
+
+  meta = {"collection": "messages"} 

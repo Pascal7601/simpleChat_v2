@@ -12,3 +12,5 @@ class User(mongoengine.Document):
   phone_number = mongoengine.StringField()
   address = mongoengine.StringField()
   bio = mongoengine.StringField()
+
+  meta = {"collection": "users"} 

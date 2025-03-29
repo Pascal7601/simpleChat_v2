@@ -86,7 +86,7 @@ function ChatDetails({ selectedUser, setSelectedUser, setNewChat, newChat, setCh
       .filter(user => user.id !== currentUser.id)
       .map(user => (
       <div onClick={()=> setSelectedUser(user)} className="chat-user" key={user.id}>
-        <img className='avatar' src="src/assets/avatar.png" alt="" />
+        <img className='avatar' src={user?.avatar || "src/assets/avatar.png"} alt="" />
           <div className="friends">
           <p className="c-username">{user.username}</p>
           <span className='c-message'>

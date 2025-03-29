@@ -1,19 +1,36 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './ProfileUpdate.css'
 import { AppContext } from '../../Context/AppContext'
 import { GrGallery } from "react-icons/gr";
 
 function ProfileUpdate() {
-  const {currentUser, token} = useContext(AppContext);
+  const {currentUser, token, setCurrentUser} = useContext(AppContext);
   const [profileImg, setProfileImg] = useState(null);
+  const [imagePreview, setImagePreview] = useState(currentUser?.avatar || "src/assets/avatar.png")
   const [userBio, setUserBio] = useState({
-    firstName: currentUser.firstName || '',
-    lastName: currentUser.lastName || '',
-    bio: currentUser.bio || '',
-    contact: currentUser.phone_number || '',
-    address: currentUser.address || '',
-    username: currentUser.username || ''
+    firstName: '',
+    lastName: '',
+    bio: '',
+    contact: '',
+    address: '',
+    username: ''
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      setUserBio({
+        firstName: currentUser.first_name || '',
+        lastName: currentUser.last_name || '',
+        bio: currentUser.bio || '',
+        contact: currentUser.phone_number || '',
+        address: currentUser.address || '',
+        username: currentUser.username || ''
+      });
+      setImagePreview(currentUser.avatar || "src/assets/avatar.png");
+    }
+  }, []);
+
+
   const handleSave = async () => {
     try {
       const response = await fetch('http://localhost:8002/users/me', {
@@ -32,15 +49,35 @@ function ProfileUpdate() {
         }) 
       });
       console.log(userBio);
-      const data = await response.json()
-    } catch (error) {
-      console.error('Error', error)
+      const updatedUser = await response.json()
+    
+
+      if (profileImg) {
+        const formData = new FormData();
+        formData.append('file', profileImg)
+        
+        const uploadRes = await fetch('http://localhost:8002/avatar', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        })
+        const avatar = uploadRes.json()
+        updatedUser.avatar = avatar.avatar_url;
+        console.log('uploaded profile pic', updatedUser);
+      }
     }
-  }
+      catch (error) {
+        console.error('Error', error)
+      }
+    }
+
   const handleProfileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfileImg(URL.createObjectURL(file));
+      setProfileImg(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   }
 
@@ -50,7 +87,7 @@ function ProfileUpdate() {
       <div className="profile-top">
         <img
          className="profile-img" 
-         src={profileImg || currentUser.avatar || "src/assets/avatar.png"}
+         src={imagePreview}
          alt="" />
         <div>
           <p>{currentUser.username}</p>

@@ -5,6 +5,7 @@ from database.users import User
 from views import services, user, message, conversation
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from utils import supabase
 
 
 app = FastAPI()

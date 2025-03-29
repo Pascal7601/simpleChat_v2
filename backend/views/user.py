@@ -6,8 +6,9 @@ from schemas.user import UserPost, UserLogin, UserResponse, UserUpdate
 from auth.auth import AuthHandler, security
 from fastapi.encoders import jsonable_encoder
 from typing import List
-from fastapi import Depends
+from fastapi import Depends, File, UploadFile
 from fastapi.security import HTTPBasicCredentials
+from utils.supabase import supab
 
 user_router = APIRouter()
 
@@ -70,6 +71,33 @@ def update_user(
   existing_user.reload()
   return existing_user
 
+@user_router.post('/avatar')
+async def upload_profile(
+  file: UploadFile = File(...),
+  credentials: HTTPBasicCredentials = Depends(security)
+  ):
+  payload = AuthHandler().decode_token(credentials.credentials)
+  existing_user = User.objects().filter(id=payload.get('user_id')).first()
+  if not existing_user:
+    raise HTTPError.not_found("user not found")
+  
+  image = await file.read()
+  filename = file.filename
+  response = supab.storage.from_('avatars').upload(
+    file=image,
+    path=filename,
+    file_options={
+      'cache-control': "3600",
+      'upsert': 'true',
+      'content-type': file.content_type
+    }
+  )
+  file_url = supab.storage.from_('avatars').get_public_url(filename)
+  
+  existing_user.update(set__avatar=file_url)
+  existing_user.reload()
+
+  return {'avatar_url': existing_user.avatar}
 
 def create_account(username, email: str, password: str):
   existing_user = User.objects().filter(email=email).first()
