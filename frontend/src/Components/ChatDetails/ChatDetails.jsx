@@ -12,7 +12,7 @@ function ChatDetails({ selectedUser, setSelectedUser, setNewChat, newChat, setCh
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:8002/users', {
+        const response = await fetch('https://simplechat-v2.onrender.com/users', {
           headers: {
             'Content-Type': 'application/json',
           }
@@ -32,7 +32,7 @@ function ChatDetails({ selectedUser, setSelectedUser, setNewChat, newChat, setCh
     const fetchChat = async () => {
       if(!selectedUser) return;
       try {
-        const response = await fetch('http://localhost:8002/chats/new', {
+        const response = await fetch('https://simplechat-v2.onrender.com/chats/new', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ function ChatDetails({ selectedUser, setSelectedUser, setNewChat, newChat, setCh
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const response = await fetch('http://localhost:8002/chats', {
+        const response = await fetch('https://simplechat-v2.onrender.com/chats', {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`

@@ -20,7 +20,7 @@ function MainChatBox({ selectedUser, newChat, setSelectedUser }) {
     const fetchMessages = async () => {
       try {
         setOldMessages([]);
-        const response = await fetch(`http://localhost:8002/messages/${newChat.id}`, {
+        const response = await fetch(`https://simplechat-v2.onrender.com/messages/${newChat.id}`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`

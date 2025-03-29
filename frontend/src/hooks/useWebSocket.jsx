@@ -9,7 +9,7 @@ const useWebSocket = (conversationId, senderId, setChatHistory = () => {}, chatH
 
     setMessages([]);
 
-    ws.current = new WebSocket(`ws://localhost:8002/ws/message/${conversationId}/${senderId}`);
+    ws.current = new WebSocket(`ws://simplechat-v2.onrender.com/ws/message/${conversationId}/${senderId}`);
 
     ws.current.onmessage = (event) => {
       const newMessage = JSON.parse(event.data);

@@ -8,7 +8,7 @@ function AppProvider({children}) {
 
   const fetchCurrentUser = async (token) => {
     try {
-      const response = await fetch('http://localhost:8002/me', {
+      const response = await fetch('https://simplechat-v2.onrender.com/me', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

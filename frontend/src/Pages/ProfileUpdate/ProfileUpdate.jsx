@@ -33,7 +33,7 @@ function ProfileUpdate() {
 
   const handleSave = async () => {
     try {
-      const response = await fetch('http://localhost:8002/users/me', {
+      const response = await fetch('https://simplechat-v2.onrender.com/users/me', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ function ProfileUpdate() {
         const formData = new FormData();
         formData.append('file', profileImg)
         
-        const uploadRes = await fetch('http://localhost:8002/avatar', {
+        const uploadRes = await fetch('https://simplechat-v2.onrender.com/avatar', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`

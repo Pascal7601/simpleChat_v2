@@ -17,8 +17,8 @@ function Login() {
     e.preventDefault();
 
     const url = currState === 'Login' 
-      ? 'http://localhost:8002/login' 
-      : 'http://localhost:8002/register';
+      ? 'https://simplechat-v2.onrender.com/login' 
+      : 'https://simplechat-v2.onrender.com/register';
 
     const requestBody = currState === 'Login' 
       ? { email, password } 
