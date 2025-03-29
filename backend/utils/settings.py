@@ -11,4 +11,3 @@ supabase_url = os.getenv('SUPABASE_URL')
 supabase_api_key = os.getenv('SUPABASE_API_KEY')
 
 mongo_db_url = os.getenv('MONGODB_URL')
-print(mongo_db_url)
